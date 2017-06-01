@@ -21,6 +21,8 @@ class Algoritmo_genetico(object):
         self.constante_por_generacion = constante_por_generacion
         # Individuos que ya estan emparejados
         self.emparejados = []
+        # Individuo encontrado
+        self.individuo_encontrado = []
 
     """Crea un individuo aleatorio dentro del rango del numero de genes del individuo modelo."""
     def individual(self, min = 0, max = 1):
@@ -92,10 +94,14 @@ class Algoritmo_genetico(object):
 
     """"""
     def train(self):
+        generaciones = 0
         while(self.calcular_fitness()):
-
             self.seleccionar_poblacion()
             self.emparejar_individuios()
             self.croosover()
             self.poblacion_siguiente_generacion()
-        print("Terminado")
+            generaciones = generaciones + 1
+        print("""Entrenamiento terminado:\n
+        Numero de generaciones: {},\n
+        Individuo modelo: {},\n
+        Individuo encontrado: {},\n""").format(generaciones, self.individuo_modelo, self.individuo_encontrado)

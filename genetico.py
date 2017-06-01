@@ -41,7 +41,8 @@ class Algoritmo_genetico(object):
             res_fitness = 0
         self.resultado_fitness = sorted(self.resultado_fitness, key=itemgetter(0), reverse=True)
         self.mejor_individuo = self.resultado_fitness[0][1]
-        
+        return true
+
 
     """De acuardo a la constante_por_generacion de la poblacion general se seleccionan los individuos
     mas cercanos a 0 """
@@ -88,3 +89,7 @@ class Algoritmo_genetico(object):
             self.poblacion.append(mutacion[i])
         self.poblacion.append(self.mejor_individuo)
         print(self.poblacion)
+
+    def train(self):
+        print("hola")
+        pass

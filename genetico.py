@@ -24,6 +24,8 @@ class Algoritmo_genetico(object):
         self.constante_por_generacion = constante_por_generacion
         # Individuos que ya estan emparejados
         self.emparejados = []
+        # Individuo encontrado
+        self.individuo_encontrado = []
 
     """Crea un individuo aleatorio dentro del rango del numero de genes del individuo modelo."""
     def individual(self, min = 0, max = 1):
@@ -43,6 +45,7 @@ class Algoritmo_genetico(object):
             self.resultado_fitness.append((-res_fitness, fitness))
             res_fitness = 0
         self.resultado_fitness = sorted(self.resultado_fitness, key=itemgetter(0), reverse=True)
+<<<<<<< HEAD
         self.mejor_individuo = self.resultado_fitness[0][1]
         return self.buscar_cero(self.resultado_fitness)
 
@@ -66,6 +69,10 @@ class Algoritmo_genetico(object):
 
 
 
+=======
+        self.mejor_individuo = self.resultado_fitness[0][1]
+        return True
+>>>>>>> 83efe765f05be1265f5c6e6836b50e3acb4e97be
 
 
     """De acuardo a la constante_por_generacion de la poblacion general se seleccionan los individuos
@@ -92,6 +99,7 @@ class Algoritmo_genetico(object):
             croosover.append(emparejados[i][1][0:pos] + emparejados[i][0][pos:len(self.mejor_individuo)])
         return croosover
 
+    """Cambia un bit (0,1) a un numero aleatorio de individuos."""
     def mutacion(self):
         individuos = self.croosover()
         mutaciones = random.randint(0, len(individuos))
@@ -103,17 +111,26 @@ class Algoritmo_genetico(object):
                 individuos[i] = 0
         return individuos
 
+    """Conforma la poblacion para una siguiente generacion si esta existe,
+    tomando los individuos mutados y el mejor individuo de la generacion actual."""
     def poblacion_siguiente_generacion(self):
         del self.poblacion[:]
         mutacion = self.mutacion()
-        print("Mutaciones:\n")
-        print(mutacion)
-        print("\n")
         for i in range(len(mutacion)):
             self.poblacion.append(mutacion[i])
         self.poblacion.append(self.mejor_individuo)
-        print(self.poblacion)
+        return(self.poblacion)
 
+    """"""
     def train(self):
-        print("hola")
-        pass
+        generaciones = 0
+        while(self.calcular_fitness()):
+            self.seleccionar_poblacion()
+            self.emparejar_individuios()
+            self.croosover()
+            self.poblacion_siguiente_generacion()
+            generaciones = generaciones + 1
+        print("""Entrenamiento terminado:\n
+        Numero de generaciones: {},\n
+        Individuo modelo: {},\n
+        Individuo encontrado: {},\n""").format(generaciones, self.individuo_modelo, self.individuo_encontrado)

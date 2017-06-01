@@ -17,17 +17,8 @@ class Algoritmo_genetico(object):
         self.resultado_fitness = []
         # Individuos por generacion con los que se trabajara
         self.constante_por_generacion = constante_por_generacion
-
-        print("individuo_modelo {}, genes {} ").format(self.individuo_modelo, self.genes)
-        print(self.individual())
-        print(self.poblacion)
-        self.calcular_fitness()
-        print("\n")
-        print(self.resultado_fitness)
-        print("\n")
-        print("Seleccionados")
-        self.seleccionar_poblacion()
-        print(self.resultado_fitness)
+        # Individuos que ya estan emparejados
+        self.emparejados = []
 
     """Crea un individuo aleatorio dentro del rango del numero de genes del individuo modelo."""
     def individual(self, min = 0, max = 1):
@@ -53,8 +44,25 @@ class Algoritmo_genetico(object):
     def seleccionar_poblacion(self):
         self.resultado_fitness = self.resultado_fitness[0:self.constante_por_generacion]
 
+    """Empareja los individuos generados entre si, dejando el individuo con fitness mas alto
+    como parte de la siguiente generacion"""
     def emparejar_individuios(self):
-        pass
+        emparejados = []
+        mejor_individuo = self.resultado_fitness[0][1]
+        restantes = self.resultado_fitness[1:len(self.resultado_fitness)]
+        for i in range(len(restantes)):
+            emparejados.append((mejor_individuo, restantes[i][1]))
+        print(mejor_individuo)
+        return emparejados
+
+        # print(restantes)
+        # print("\n")
+        # print(emparejados)
+        # emparejados = []
+        # for i in range(len(individuos)):
+        #     emparejados.append(mejor_individuo, individuos[i])
+        # print(emparejados)
+
 
 if __name__ == "__main__":
 
@@ -63,3 +71,16 @@ if __name__ == "__main__":
     constante_por_generacion = 8
 
     genetico = Algoritmo_genetico(individuo_modelo, poblacion_inicial, constante_por_generacion);
+
+    print("Individuo_modelo: {}, numero de genes: {} \n").format(genetico.individuo_modelo, genetico.genes)
+    print("Prueba individual: {} ").format(genetico.individual())
+    print("Poblacion:\n")
+    print("{} \n").format(genetico.poblacion)
+    print("Resultado de fitness:\n")
+    genetico.calcular_fitness()
+    print("{} \n").format(genetico.resultado_fitness)
+    print("Individuos seleccionados:\n")
+    genetico.seleccionar_poblacion()
+    print("{} \n").format(genetico.resultado_fitness)
+    print("Emparejados:\n")
+    print(genetico.emparejar_individuios())

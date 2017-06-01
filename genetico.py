@@ -1,6 +1,9 @@
+from builtins import print
 from operator import itemgetter, attrgetter
 import random
 import  numpy as np
+from pip.utils import read_text_file
+
 
 class Algoritmo_genetico(object):
     """docstring for Algoritmo_genetico."""
@@ -41,7 +44,28 @@ class Algoritmo_genetico(object):
             res_fitness = 0
         self.resultado_fitness = sorted(self.resultado_fitness, key=itemgetter(0), reverse=True)
         self.mejor_individuo = self.resultado_fitness[0][1]
-        return true
+        return self.buscar_cero(self.resultado_fitness)
+
+
+    def buscar_cero( self ,resultado_fitness):
+        encontro = False
+        print(resultado_fitness)
+        for j in range(len(resultado_fitness)):
+            if resultado_fitness[j][0] == 0:
+                encontro = True
+            else:
+                self.individuo_encontrado = [j][1]
+        return encontro
+
+
+
+
+
+
+
+
+
+
 
 
     """De acuardo a la constante_por_generacion de la poblacion general se seleccionan los individuos

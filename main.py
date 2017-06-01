@@ -8,9 +8,14 @@ if __name__ == "__main__":
     poblacion_inicial = 5
     constante_por_generacion = 4
 
-    genetico = Algoritmo_genetico(individuo_modelo, poblacion_inicial, constante_por_generacion);
+    genetico = Algoritmo_genetico(individuo_modelo, poblacion_inicial, constante_por_generacion );
 
-    genetico.train()
+    #genetico.train()
+
+    print(genetico.calcular_fitness())
+
+
+
 
     # print("Individuo_modelo: {}, numero de genes: {} \n").format(genetico.individuo_modelo, genetico.genes)
 
@@ -33,3 +38,5 @@ if __name__ == "__main__":
     # genetico.mutacion()
     # print("\nSiguiente generacion:\n")
     # genetico.poblacion_siguiente_generacion()
+
+

@@ -1,11 +1,10 @@
-
+from operator import itemgetter, attrgetter
 import random
-
 import  numpy as np
 
 class Algoritmo_genetico(object):
     """docstring for Algoritmo_genetico."""
-    def __init__(self, individuo_modelo, poblacion_inicial):
+    def __init__(self, individuo_modelo, poblacion_inicial, constante_por_generacion):
         # Modelo de cromosoma, es decir el objetivo que se pretende alcanzar con el algoritmo.
         self.individuo_modelo = individuo_modelo
         # Longitud del tamano genetico del cromosoma
@@ -13,37 +12,54 @@ class Algoritmo_genetico(object):
         # Cantidad de individuos que se selecciona para la mutacion
         self.poblacion_inicial = poblacion_inicial
         # Poblacion general
-        self.poblacion = self.generarPoblacion()
+        self.poblacion = self.generar_poblacion()
         # Resultado de la funcion fitness para cada individuo de la poblacion
         self.resultado_fitness = []
+        # Individuos por generacion con los que se trabajara
+        self.constante_por_generacion = constante_por_generacion
 
         print("individuo_modelo {}, genes {} ").format(self.individuo_modelo, self.genes)
         print(self.individual())
         print(self.poblacion)
-        self.calcularFitness()
+        self.calcular_fitness()
         print("\n")
+        print(self.resultado_fitness)
+        print("\n")
+        print("Seleccionados")
+        self.seleccionar_poblacion()
+        print(self.resultado_fitness)
 
     """Crea un individuo aleatorio dentro del rango del numero de genes del individuo modelo."""
     def individual(self, min = 0, max = 1):
             return[random.randint(min, max) for i in range(self.genes)]
 
     """Genera una poblacion de individuos aleatoria."""
-    def generarPoblacion(self):
+    def generar_poblacion(self):
         return [self.individual() for i in range(self.poblacion_inicial)]
 
     """Calcula el valor del fitness para cada individuo de la poblacion."""
-    def calcularFitness(self):
+    def calcular_fitness(self):
         for i in range(len(self.poblacion)):
             res_fitness = 0
             fitness = self.poblacion[i]
             for j in range(len(fitness)):
                 res_fitness = res_fitness + abs(self.individuo_modelo[j] - fitness[j])
-            print(-res_fitness)
-            res = 0
+            self.resultado_fitness.append((-res_fitness, fitness))
+            res_fitness = 0
+        self.resultado_fitness = sorted(self.resultado_fitness, key=itemgetter(0), reverse=True)
+
+    """De acuardo a la constante_por_generacion de la poblacion general se seleccionan los individuos
+    mas cercanos a 0 """
+    def seleccionar_poblacion(self):
+        self.resultado_fitness = self.resultado_fitness[0:self.constante_por_generacion]
+
+    def emparejar_individuios(self):
+        pass
 
 if __name__ == "__main__":
 
     individuo_modelo = np.array([1, 1, 0, 1, 0, 0, 1, 0])
-    poblacion_inicial = 4
+    poblacion_inicial = 10
+    constante_por_generacion = 8
 
-    genetico = Algoritmo_genetico(individuo_modelo, poblacion_inicial);
+    genetico = Algoritmo_genetico(individuo_modelo, poblacion_inicial, constante_por_generacion);

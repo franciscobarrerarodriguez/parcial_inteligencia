@@ -63,9 +63,9 @@ class Algoritmo_genetico(object):
         for i in range(len(restantes)):
             aux.append((self.mejor_individuo, restantes[i]))
         self.poblacion = aux
-        return self.poblacion
+        return self.poblacion 
 
-    
+
 
 
     def to_string(self):

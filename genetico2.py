@@ -16,7 +16,8 @@ class Algoritmo_genetico(object):
         self.poblacion = self.generar_poblacion(poblacion_inicial)
         # Mejor individuo por generacion
         self.mejor_individuo = []
-
+        # Numero de generaciones para encontrar el individuo modelo
+        self.generaciones = 0
 
     """Crea un individuo aleatorio dentro del rango del numero de genes del individuo modelo."""
     def individual(self, min = 0, max = 1):
@@ -37,7 +38,7 @@ class Algoritmo_genetico(object):
             aux.append((-res_fitness, fitness))
         self.poblacion = sorted(aux, key=itemgetter(0), reverse=True)
         self.mejor_individuo = self.poblacion[0][1]
-        return self.poblacion
+        return self.buscar_cero()
 
     """Busca dentro de los resultados de la funcion fitness si existe un cero."""
     def buscar_cero(self):
@@ -63,9 +64,51 @@ class Algoritmo_genetico(object):
         for i in range(len(restantes)):
             aux.append((self.mejor_individuo, restantes[i]))
         self.poblacion = aux
-        return self.poblacion 
+        return self.poblacion
 
+    """Se encarga de mezclar dos individuos, desde una posicion aleatoria."""
+    def croosover(self):
+        cross = []
+        for i in range(len(self.poblacion)):
+            pos = random.randint(1, (len(self.mejor_individuo)-1))
+            cross.append(self.poblacion[i][0][0:pos] + self.poblacion[i][1][pos:len(self.mejor_individuo)])
+            cross.append(self.poblacion[i][1][0:pos] + self.poblacion[i][0][pos:len(self.mejor_individuo)])
+        self.poblacion = cross
+        return self.poblacion
 
+    """Cambia un bit (0,1) a un numero aleatorio de individuos."""
+    def mutacion(self):
+        for i in range(random.randint(0,len(self.poblacion)-1)):# Revisar -1
+            pos = random.randint(0, len(self.poblacion[i])-1)# Revisar -1
+            if self.poblacion[i][pos] == 0:
+                self.poblacion[i][pos] = 1
+            elif self.poblacion[i][pos] == 1:
+                self.poblacion[i][pos] = 0
+        return self.poblacion
+
+    """Conforma la poblacion para una siguiente generacion si esta existe,
+    tomando los individuos mutados y el mejor individuo de la generacion actual."""
+    def siguiente_generacion(self):
+        generacion = []
+        generacion.append(self.mejor_individuo)
+        for i in range(len(self.poblacion)):
+            generacion.append(self.poblacion[i])
+        self.poblacion = generacion[0:self.constante_por_generacion]
+        return self.poblacion
+
+    def train(self):
+        while not self.fitness():
+            self.seleccionar_poblacion()
+            self.emparejar()
+            self.croosover()
+            self.mutacion()
+            self.siguiente_generacion()
+            self.generaciones = self.generaciones + 1
+            # time.sleep(5)
+        print("""Entrenamiento terminado:\n
+        Numero de generaciones: {},\n
+        Individuo modelo: {},\n
+        Individuo encontrado: {},\n""").format(self.generaciones, self.individuo_modelo, self.mejor_individuo)
 
 
     def to_string(self):
@@ -77,19 +120,23 @@ if __name__ == '__main__':
     poblacion_inicial = 5
     constante_por_generacion = 4
     genetico = Algoritmo_genetico(individuo_modelo, poblacion_inicial, constante_por_generacion)
-
-    print (genetico.to_string())
-    # print ("Prueba individual: {}\n").format(genetico.individual())
-    print ("Poblacion:\n\n{}").format(t.beautify(genetico.poblacion))
-
-    print("Resultado fitness:\n\n{}").format(t.beautify(genetico.fitness()))
-
-    if(genetico.buscar_cero()):
-        print("\nCero encontrado, individuo: {}").format(genetico.mejor_individuo)
-    else:
-        print("\nCero no encontrado, mejor individuo: {}").format(genetico.mejor_individuo)
-        print ("\nPoblacion seleccionada:\n\n{}").format(t.beautify(genetico.seleccionar_poblacion()))
-        print("\nPoblacion emparejada:\n\n{}").format(t.beautify(genetico.emparejar()))
+    genetico.train()
+    # print (genetico.to_string())
+    # # print ("Prueba individual: {}\n").format(genetico.individual())
+    # print ("Poblacion:\n\n{}").format(t.beautify(genetico.poblacion))
+    #
+    # print("Resultado fitness:\n\n{}").format(t.beautify(genetico.fitness()))
+    #
+    # if(genetico.buscar_cero()):
+    #     print("\nCero encontrado, individuo: {}").format(genetico.mejor_individuo)
+    # else:
+    #     print("\nCero no encontrado, mejor individuo: {}").format(genetico.mejor_individuo)
+    #     print ("\nPoblacion seleccionada:\n\n{}").format(t.beautify(genetico.seleccionar_poblacion()))
+    #     print("\nPoblacion emparejada:\n\n{}").format(t.beautify(genetico.emparejar()))
+    #     print("\nPoblacion croosover:\n\n{}").format(t.beautify(genetico.croosover()))
+    #     print("\nPoblacion mutada:\n\n{}").format(t.beautify(genetico.mutacion()))
+    #     print("\nPoblacion siguiente generacion:\n\n{}").format(t.beautify(genetico.siguiente_generacion()))
+    #     print("\nResultado fitness:\n\n{}").format(t.beautify(genetico.fitness()))
 
 
     # genetico.poblacion = [

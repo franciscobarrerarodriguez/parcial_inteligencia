@@ -104,7 +104,6 @@ class Algoritmo_genetico(object):
             self.mutacion()
             self.siguiente_generacion()
             self.generaciones = self.generaciones + 1
-            # time.sleep(5)
         print("""Entrenamiento terminado:\n
         Numero de generaciones: {},\n
         Individuo modelo: {},\n

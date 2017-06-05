@@ -1,4 +1,5 @@
 from genetico import Algoritmo_genetico
+import time
 
 if __name__ == '__main__':
 
@@ -15,9 +16,13 @@ if __name__ == '__main__':
      [0,1,0,1,0,1,0,1],# U
      [0,1,0,0,1,1,1,0],# N
      [0,1,0,0,0,1,0,0],# D
-     [0,1,0,0,1,1,1,1]# O
+     [0,1,0,0,1,1,1,1] # O
     ]
+
+    start_time = time.time()
 
     for i in range(len(individuos)):
         genetico = Algoritmo_genetico(individuos[i], poblacion_inicial, constante_por_generacion)
         genetico.train()
+
+    print("Tiempo de ejeucion: {} segundos").format(time.time() - start_time)

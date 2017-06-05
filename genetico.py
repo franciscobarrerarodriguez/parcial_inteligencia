@@ -18,6 +18,8 @@ class Algoritmo_genetico(object):
         self.mejor_individuo = []
         # Numero de generaciones para encontrar el individuo modelo
         self.generaciones = 0
+        # Control de DEBUG
+        self.DEBUG = False
 
     """Crea un individuo aleatorio dentro del rango del numero de genes del individuo modelo."""
     def individual(self, min = 0, max = 1):
@@ -98,17 +100,40 @@ class Algoritmo_genetico(object):
 
     """Itera hasta encontrar el individuo modelo."""
     def train(self):
-        while not self.fitness():
-            self.seleccionar_poblacion()
-            self.emparejar()
-            self.croosover()
-            self.mutacion()
-            self.siguiente_generacion()
-            self.generaciones = self.generaciones + 1
+        if not self.DEBUG:
+            while not self.fitness():
+                self.seleccionar_poblacion()
+                self.emparejar()
+                self.croosover()
+                self.mutacion()
+                self.siguiente_generacion()
+                self.generaciones = self.generaciones + 1
+        else:
+            print (self.to_string())
+            print ("\nPoblacion:\n\n{}").format(t.beautify(self.poblacion))
+            while not self.fitness():
+                print("\nResultado fitness:\n\n{}").format(t.beautify(self.poblacion))
+                print("\nPoblacion seleccionada:\n\n{}").format(t.beautify(self.seleccionar_poblacion()))
+                print("\nPoblacion emparejada:\n\n{}").format(t.beautify(self.emparejar()))
+                print("\nPoblacion croosover:\n\n{}").format(t.beautify(self.croosover()))
+                print("\nPoblacion mutada:\n\n{}").format(t.beautify(self.mutacion()))
+                print("\nPoblacion siguiente generacion:\n\n{}").format(t.beautify(self.siguiente_generacion()))
+                self.generaciones = self.generaciones + 1
+
         print("""Entrenamiento terminado:\n
         Numero de generaciones: {},\n
         Individuo modelo: {},\n
         Individuo encontrado: {},\n""").format(self.generaciones, self.individuo_modelo, self.mejor_individuo)
+
+    def iterar_individual(self, poblacion, individuo_modelo):
+        pos = 0
+        for i in range(len(poblacion)):
+            if individuo_modelo == poblacion[i]:
+                pos = i
+        print("\nPoblacion:\n\n{}").format(t.beautify(poblacion))
+        print("\nIndividuo modelo: {}").format(individuo_modelo)
+        print("Individuo encontrado en la iteracion {}").format(pos)
+
 
     """Regresa todos los parametros de la clase."""
     def to_string(self):

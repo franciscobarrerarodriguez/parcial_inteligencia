@@ -1,7 +1,10 @@
 from genetico import Algoritmo_genetico
+import tools as t
 import time
 
 if __name__ == '__main__':
+
+    poblacion = t.arreglo_binario(255)
 
     individuo_modelo = [1,1,0,1,0,0,1,0]
 
@@ -13,6 +16,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    genetico.train()
-
+    genetico.iterar_individual(poblacion, individuo_modelo)
+    
     print("Tiempo de ejeucion: {} segundos").format(time.time() - start_time)

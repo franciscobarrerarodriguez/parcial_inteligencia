@@ -1,9 +1,7 @@
-from builtins import print
 from operator import itemgetter, attrgetter
 import random
 import  numpy as np
-from pip.utils import read_text_file
-
+import time
 
 class Algoritmo_genetico(object):
     """docstring for Algoritmo_genetico."""
@@ -45,40 +43,26 @@ class Algoritmo_genetico(object):
             self.resultado_fitness.append((-res_fitness, fitness))
             res_fitness = 0
         self.resultado_fitness = sorted(self.resultado_fitness, key=itemgetter(0), reverse=True)
-<<<<<<< HEAD
         self.mejor_individuo = self.resultado_fitness[0][1]
         return self.buscar_cero(self.resultado_fitness)
 
-
-    def buscar_cero( self ,resultado_fitness):
+    def buscar_cero(self ,resultado_fitness):
         encontro = False
-        print(resultado_fitness)
         for j in range(len(resultado_fitness)):
-            if resultado_fitness[j][0] == 0:
+            if (resultado_fitness[j][0] == 0) and (encontro == False):
+                print(" cero {}").format(resultado_fitness[j][0])
+                self.individuo_encontrado = resultado_fitness[j][1]
                 encontro = True
-            else:
-                self.individuo_encontrado = [j][1]
         return encontro
-
-
-
-
-
-
-
-
-
-
-=======
-        self.mejor_individuo = self.resultado_fitness[0][1]
-        return True
->>>>>>> 83efe765f05be1265f5c6e6836b50e3acb4e97be
-
 
     """De acuardo a la constante_por_generacion de la poblacion general se seleccionan los individuos
     mas cercanos a 0 """
     def seleccionar_poblacion(self):
         self.resultado_fitness = self.resultado_fitness[0:self.constante_por_generacion]
+
+    """Selecciona la poblacion para la nueva generacion."""
+    def poblacion_nueva_generacion(self):
+        self.poblacion = self.poblacion[0:self.constante_por_generacion]
 
     """Empareja los individuos generados entre si, dejando el individuo con fitness mas alto
     como parte de la siguiente generacion"""
@@ -116,21 +100,43 @@ class Algoritmo_genetico(object):
     def poblacion_siguiente_generacion(self):
         del self.poblacion[:]
         mutacion = self.mutacion()
+        self.poblacion.append(self.mejor_individuo)
         for i in range(len(mutacion)):
             self.poblacion.append(mutacion[i])
-        self.poblacion.append(self.mejor_individuo)
-        return(self.poblacion)
+        # return(self.poblacion)
 
     """"""
     def train(self):
         generaciones = 0
-        while(self.calcular_fitness()):
+        while(self.calcular_fitness() == False):
             self.seleccionar_poblacion()
-            self.emparejar_individuios()
-            self.croosover()
             self.poblacion_siguiente_generacion()
+            self.poblacion_nueva_generacion()
             generaciones = generaciones + 1
+            print(generaciones)
+            # time.sleep(5)
         print("""Entrenamiento terminado:\n
         Numero de generaciones: {},\n
         Individuo modelo: {},\n
         Individuo encontrado: {},\n""").format(generaciones, self.individuo_modelo, self.individuo_encontrado)
+
+        # print(self.resultado_fitness)
+        # print(self.buscar_cero(self.resultado_fitness))
+        # self.seleccionar_poblacion()
+        # print("\n")
+        # print(self.resultado_fitness)
+        # print("Mejor individuo {}").format(self.mejor_individuo)
+        # self.emparejar_individuios()
+        # self.croosover()
+        # self.poblacion_siguiente_generacion()
+        # self.seleccionar_poblacion()
+        # print("\n")
+        # self.calcular_fitness()
+        # self.seleccionar_poblacion()
+        # empa = self.emparejar_individuios()
+        # print(empa)
+        # self.croosover()
+        # print(self.poblacion)
+        # self.poblacion_siguiente_generacion()
+        # self.poblacion_nueva_generacion()
+        # print("\n {}").format(self.poblacion)
